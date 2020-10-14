@@ -1,24 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import Header from './components/Header'
+import Quotebox from './components/Quotebox';
 
 function App() {
+
+  const [quote, setQuote] = useState({})
+
+  useEffect(() => {
+    fetch('https://api.quotable.io/random')
+      .then(response => response.json())
+      .then(data => {
+        console.log(`${data.content} —${data.author}`)
+        setQuote({ content: data.content, author: data.author })
+      })
+  }, [])
+
+  const getNewQuote = () => {
+    fetch('https://api.quotable.io/random')
+      .then(response => response.json())
+      .then(data => {
+        console.log(`${data.content} —${data.author}`)
+        setQuote({ content: data.content, author: data.author })
+      })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Quotebox quote={quote} getNewQuote={getNewQuote} />
     </div>
   );
 }
